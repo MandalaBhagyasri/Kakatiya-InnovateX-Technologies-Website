@@ -320,11 +320,35 @@ if (jobForm) {
     e.preventDefault();
     const submitBtn = jobForm.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerText;
-    submitBtn.innerText = 'Submitting Application...';
+    
+    // Capture form values
+    const role = document.getElementById('job-title-input').value;
+    const name = document.getElementById('app-name').value;
+    const email = document.getElementById('app-email').value;
+    const skills = document.getElementById('app-skills').value;
+    const resume = document.getElementById('app-resume').value;
+    const message = document.getElementById('app-message').value;
+
+    submitBtn.innerText = 'Opening Email Client...';
     submitBtn.disabled = true;
 
+    // Construct Mailto link to send details to HR Support mail
+    const mailSubject = `Job Application: ${role} - ${name}`;
+    const mailBody = `Hello HR Team,\n\nI would like to submit my job application details.\n\n` + 
+                     `Full Name: ${name}\n` + 
+                     `Email Address: ${email}\n` + 
+                     `Role Interested: ${role}\n` + 
+                     `Key Skills: ${skills}\n` + 
+                     `Resume / Portfolio URL: ${resume}\n\n` + 
+                     `Cover Message / Introduction:\n${message}\n`;
+
+    const mailtoUrl = `mailto:hr.support@kakatiyainnovatextechnologies.com?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+
+    // Trigger the email client
+    window.location.href = mailtoUrl;
+
     setTimeout(() => {
-      alert('Success! Your application has been successfully submitted to Kakatiya InnovateX Technologies. Our recruitment team will review your profile.');
+      alert('Your application email draft has been generated. Please review and hit send in your email client to submit it to hr.support@kakatiyainnovatextechnologies.com.');
       jobForm.reset();
       submitBtn.innerText = originalText;
       submitBtn.disabled = false;
@@ -334,7 +358,7 @@ if (jobForm) {
       if (modal) {
         modal.hide();
       }
-    }, 2000);
+    }, 1500);
   });
 }
 

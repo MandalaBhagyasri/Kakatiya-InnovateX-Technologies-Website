@@ -769,8 +769,8 @@
         <div class="modal-body p-4">
           <form id="job-apply-form">
             <div class="mb-3">
-              <label for="job-title-input" class="form-label text-muted small">Position Title</label>
-              <input type="text" id="job-title-input" class="form-control bg-dark text-white border-secondary" readonly>
+              <label for="job-title-input" class="form-label text-muted small">Role Interested</label>
+              <input type="text" id="job-title-input" class="form-control bg-dark text-white border-secondary" required placeholder="e.g. Software Engineer, Operations Manager">
             </div>
             <div class="mb-3">
               <label for="app-name" class="form-label text-muted small">Full Name</label>
@@ -781,8 +781,16 @@
               <input type="email" id="app-email" class="form-control bg-dark text-white border-secondary" required placeholder="name@company.com">
             </div>
             <div class="mb-3">
-              <label for="app-resume" class="form-label text-muted small">Resume URL / Details</label>
-              <textarea id="app-resume" rows="3" class="form-control bg-dark text-white border-secondary" required placeholder="Paste LinkedIn profile link or outline expertise details..."></textarea>
+              <label for="app-skills" class="form-label text-muted small">Key Skills</label>
+              <input type="text" id="app-skills" class="form-control bg-dark text-white border-secondary" required placeholder="e.g. React, Node.js, Project Management, SEO">
+            </div>
+            <div class="mb-3">
+              <label for="app-resume" class="form-label text-muted small">Resume URL / Portfolio Details</label>
+              <input type="text" id="app-resume" class="form-control bg-dark text-white border-secondary" required placeholder="Paste LinkedIn or Google Drive resume link...">
+            </div>
+            <div class="mb-3">
+              <label for="app-message" class="form-label text-muted small">Cover Message / Brief Introduction</label>
+              <textarea id="app-message" rows="3" class="form-control bg-dark text-white border-secondary" required placeholder="Share details about your expertise, experience, and timeline..."></textarea>
             </div>
             <button type="submit" class="btn btn-gold-custom w-100 mt-2">Submit Application</button>
           </form>
