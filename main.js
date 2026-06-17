@@ -369,15 +369,35 @@ if (contactForm) {
     e.preventDefault();
     const submitBtn = contactForm.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerText;
-    submitBtn.innerText = 'Sending Message...';
+
+    // Capture form values
+    const name = document.getElementById('contact-name').value;
+    const email = document.getElementById('contact-email').value;
+    const subject = document.getElementById('contact-subject').value;
+    const message = document.getElementById('contact-msg').value;
+
+    submitBtn.innerText = 'Opening Email Client...';
     submitBtn.disabled = true;
 
+    // Construct Mailto link to send details to HR Support mail
+    const mailSubject = `Consultation Request: ${subject} - ${name}`;
+    const mailBody = `Hello Team,\n\nI would like to request a consultation.\n\n` + 
+                     `Full Name: ${name}\n` + 
+                     `Email Address: ${email}\n` + 
+                     `Subject Interest: ${subject}\n\n` + 
+                     `Message Details:\n${message}\n`;
+
+    const mailtoUrl = `mailto:hr.support@kakatiyainnovatextechnologies.com?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+
+    // Trigger the email client
+    window.location.href = mailtoUrl;
+
     setTimeout(() => {
-      alert('Thank you for reaching out! Your inquiry has been routed to our corporate relations desk. A representative will contact you shortly.');
+      alert('Your consultation request email draft has been generated. Please review and hit send in your email client to submit it to hr.support@kakatiyainnovatextechnologies.com.');
       contactForm.reset();
       submitBtn.innerText = originalText;
       submitBtn.disabled = false;
-    }, 1800);
+    }, 1500);
   });
 }
 
