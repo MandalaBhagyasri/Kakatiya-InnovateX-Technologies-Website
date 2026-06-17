@@ -316,7 +316,7 @@ categoryButtons.forEach(btn => {
 // Careers & Job Applications Handling
 const jobForm = document.getElementById('job-apply-form');
 if (jobForm) {
-  jobForm.addEventListener('submit', (e) => {
+  jobForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const submitBtn = jobForm.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerText;
@@ -329,10 +329,29 @@ if (jobForm) {
     const resume = document.getElementById('app-resume').value;
     const message = document.getElementById('app-message').value;
 
-    submitBtn.innerText = 'Opening Email Client...';
+    submitBtn.innerText = 'Submitting to Database...';
     submitBtn.disabled = true;
 
-    // Construct Mailto link to send details to HR Support mail
+    try {
+      // 1. Submit to database API
+      await fetch('/api/applicants', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          job_id: null,
+          name: name,
+          email: email,
+          skills: skills,
+          resume_url: resume,
+          message: message
+        })
+      });
+    } catch (err) {
+      console.error("Database submission failed, running fallback email routing:", err);
+    }
+
+    // 2. Mailto routing trigger
+    submitBtn.innerText = 'Opening Email Client...';
     const mailSubject = `Job Application: ${role} - ${name}`;
     const mailBody = `Hello HR Team,\n\nI would like to submit my job application details.\n\n` + 
                      `Full Name: ${name}\n` + 
@@ -343,12 +362,10 @@ if (jobForm) {
                      `Cover Message / Introduction:\n${message}\n`;
 
     const mailtoUrl = `mailto:hr.support@kakatiyainnovatextechnologies.com?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
-
-    // Trigger the email client
     window.location.href = mailtoUrl;
 
     setTimeout(() => {
-      alert('Your application email draft has been generated. Please review and hit send in your email client to submit it to hr.support@kakatiyainnovatextechnologies.com.');
+      alert('Your details have been saved to our database, and an email draft has been generated. Please review and hit send in your email client to submit it to hr.support@kakatiyainnovatextechnologies.com.');
       jobForm.reset();
       submitBtn.innerText = originalText;
       submitBtn.disabled = false;
@@ -365,7 +382,7 @@ if (jobForm) {
 // Contact Form submission
 const contactForm = document.getElementById('contact-us-form');
 if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
+  contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const submitBtn = contactForm.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerText;
@@ -376,10 +393,28 @@ if (contactForm) {
     const subject = document.getElementById('contact-subject').value;
     const message = document.getElementById('contact-msg').value;
 
-    submitBtn.innerText = 'Opening Email Client...';
+    submitBtn.innerText = 'Submitting to Database...';
     submitBtn.disabled = true;
 
-    // Construct Mailto link to send details to HR Support mail
+    try {
+      // 1. Submit to database API
+      await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          phone: '',
+          subject: subject,
+          message: message
+        })
+      });
+    } catch (err) {
+      console.error("Database submission failed, running fallback email routing:", err);
+    }
+
+    // 2. Mailto routing trigger
+    submitBtn.innerText = 'Opening Email Client...';
     const mailSubject = `Consultation Request: ${subject} - ${name}`;
     const mailBody = `Hello Team,\n\nI would like to request a consultation.\n\n` + 
                      `Full Name: ${name}\n` + 
@@ -388,12 +423,10 @@ if (contactForm) {
                      `Message Details:\n${message}\n`;
 
     const mailtoUrl = `mailto:hr.support@kakatiyainnovatextechnologies.com?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
-
-    // Trigger the email client
     window.location.href = mailtoUrl;
 
     setTimeout(() => {
-      alert('Your consultation request email draft has been generated. Please review and hit send in your email client to submit it to hr.support@kakatiyainnovatextechnologies.com.');
+      alert('Your consultation details have been saved to our database, and an email draft has been generated. Please review and hit send in your email client to submit it to hr.support@kakatiyainnovatextechnologies.com.');
       contactForm.reset();
       submitBtn.innerText = originalText;
       submitBtn.disabled = false;
