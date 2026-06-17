@@ -434,10 +434,4 @@ if (contactForm) {
   });
 }
 
-// Map Mockup Interaction (Optional polish)
-const mapMockup = document.getElementById('map-mockup');
-if (mapMockup) {
-  mapMockup.addEventListener('click', () => {
-    window.open('https://maps.google.com', '_blank');
-  });
-}
+

@@ -1077,13 +1077,16 @@
               </div>
             </div>
           </div>
-          <!-- Google Maps Mockup -->
-          <div id="map-mockup" class="glass-card p-2 cursor-pointer interactive-el" style="height: 150px; overflow: hidden; position: relative;">
-            <div class="position-absolute top-0 left-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background: rgba(11, 17, 32, 0.4); z-index: 2;">
-              <span class="badge bg-gold-custom px-3 py-2 text-dark"><i class="bi bi-map me-1"></i> Interactive Map Mockup</span>
-            </div>
-            <!-- Dynamic map background -->
-            <div style="background: #1E293B; width:100%; height:100%; border-radius:12px;"></div>
+          <!-- Live Google Map -->
+          <div class="glass-card p-2" style="height: 180px; overflow: hidden; border-radius: 16px;">
+            <iframe 
+              src="https://maps.google.com/maps?q=Warangal,%20Telangana,%20India&t=&z=13&ie=UTF8&iwloc=&output=embed" 
+              width="100%" 
+              height="100%" 
+              style="border:0; border-radius: 12px; filter: grayscale(100%) invert(90%) contrast(90%);" 
+              allowfullscreen="" 
+              loading="lazy">
+            </iframe>
           </div>
         </div>
 
