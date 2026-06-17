@@ -18,6 +18,24 @@ app.secret_key = os.getenv('FLASK_SECRET_KEY', 'kakatiyainnovatexsecretkey2026')
 
 DB_PATH = os.path.join(os.path.dirname(__file__), 'database', 'db.sqlite')
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
+
+import requests
+
+def sync_to_google_sheet(payload):
+    webhook_url = os.getenv('GOOGLE_SHEET_WEBHOOK_URL')
+    if not webhook_url:
+        print("GOOGLE_SHEET_WEBHOOK_URL is not set. Skipping live sync.")
+        return False
+    try:
+        response = requests.post(webhook_url, json=payload, timeout=10)
+        if response.status_code == 200:
+            print("Successfully synced submission to Google Sheet.")
+            return True
+        else:
+            print(f"Google Sheet sync failed with status code: {response.status_code}")
+    except Exception as e:
+        print(f"Error syncing to Google Sheet: {e}")
+    return False
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB limit
 
@@ -326,6 +344,17 @@ def api_add_applicant():
     conn.commit()
     app_id = cursor.lastrowid
     conn.close()
+
+    # Sync to Google Sheets if configured
+    sync_to_google_sheet({
+        "form_type": "Job Application",
+        "name": name,
+        "email": email,
+        "subject_or_role": "Talent Pool" if not job_id else f"Job ID: {job_id}",
+        "skills_or_resume": f"Skills: {skills} | Resume: {resume_url}",
+        "message": message
+    })
+
     return jsonify({"success": True, "id": app_id})
 
 @app.route('/api/applicants/<int:applicant_id>', methods=['PUT', 'DELETE'])
@@ -398,6 +427,17 @@ def api_add_inquiry():
     conn.commit()
     inquiry_id = cursor.lastrowid
     conn.close()
+
+    # Sync to Google Sheets if configured
+    sync_to_google_sheet({
+        "form_type": "Consultation Inquiry",
+        "name": name,
+        "email": email,
+        "subject_or_role": subject,
+        "skills_or_resume": f"Phone: {phone}" if phone else "Not Provided",
+        "message": message
+    })
+
     return jsonify({"success": True, "id": inquiry_id})
 
 @app.route('/api/inquiries/<int:inquiry_id>', methods=['PUT', 'DELETE'])
