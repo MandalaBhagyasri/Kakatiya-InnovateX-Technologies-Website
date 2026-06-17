@@ -2,7 +2,7 @@ import os
 import sqlite3
 import csv
 import io
-from flask import Flask, request, jsonify, session, redirect, send_from_directory, make_response
+from flask import Flask, request, jsonify, session, redirect, send_from_directory, make_response, render_template
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
@@ -13,7 +13,7 @@ load_dotenv()
 from db import init_db
 init_db()
 
-app = Flask(__name__, static_folder='.', static_url_path='')
+app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'kakatiyainnovatexsecretkey2026')
 
 DB_PATH = os.path.join(os.path.dirname(__file__), 'database', 'db.sqlite')
@@ -65,20 +65,24 @@ def login_required(f):
 # --- STATIC CONTENT ROUTING FOR PUBLIC SITE ---
 @app.route('/')
 def home():
-    return send_from_directory('.', 'index.html')
+    return render_template('index.html')
 
 @app.route('/admin/')
 @app.route('/admin/dashboard.html')
 def admin_dashboard():
     if not session.get('logged_in'):
         return redirect('/admin/login.html')
-    return send_from_directory('admin', 'dashboard.html')
+    return render_template('admin/dashboard.html')
 
 @app.route('/admin/login.html')
 def admin_login():
     if session.get('logged_in'):
         return redirect('/admin/dashboard.html')
-    return send_from_directory('admin', 'login.html')
+    return render_template('admin/login.html')
+
+@app.route('/admin/setup.html')
+def admin_setup():
+    return render_template('admin/setup.html')
 
 # Serve uploads folder static files
 @app.route('/uploads/<path:filename>')

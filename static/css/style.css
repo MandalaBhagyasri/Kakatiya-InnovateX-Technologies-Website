@@ -480,7 +480,7 @@ h1, h2, h3, h4, h5, h6 {
   transform: translate(-50%, -50%);
   width: 60vw;
   height: 75vh;
-  background-image: url('watermark.jpg');
+  background-image: url('../images/watermark.jpg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
